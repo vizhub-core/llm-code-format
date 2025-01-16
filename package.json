@@ -1,0 +1,41 @@
+{
+  "name": "llm-code-format",
+  "version": "0.0.1",
+  "description": "Parsing and serialization of multiple code files in Markdown for LLMs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/curran/llm-code-format.git"
+  },
+  "keywords": [
+    "LLM",
+    "Code",
+    "AI",
+    "Coding",
+    "Markdown"
+  ],
+  "author": "Curran Kelleher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/curran/llm-code-format/issues"
+  },
+  "homepage": "https://github.com/curran/llm-code-format#readme",
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.1"
+  }
+}
