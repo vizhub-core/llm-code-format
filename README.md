@@ -1,10 +1,11 @@
 # llm-code-format
 
-A TypeScript library for parsing and serializing multiple code files in Markdown format, specifically designed for Large Language Model (LLM) interactions.
+A TypeScript library for parsing and serializing multiple code files in Markdown format, specifically designed for Large Language Model (LLM) interactions. The idea of this comes from the fact that when you ask an LLM to write code for you with multiple files, different models have different "preferences" when it comes to representing code. This library aims to provide a consistent way to parse and serialize code files in Markdown format, regardless of the format used by the LLM. It may also be useful for other applications that need to work with multiple code files in Markdown format, such as being able to extract code files from a Markdown document or generate a Markdown document from code files.
 
 ## Features
 
 - Parse code blocks from various Markdown formats including:
+
   - Bold Format (`**filename.js**`)
   - Backtick-Heading Format (`### `filename.js``)
   - Standard Heading Format (`### filename.js`)
@@ -29,7 +30,7 @@ npm install llm-code-format
 ## Usage
 
 ```typescript
-import { parseMarkdownFiles, serializeMarkdownFiles } from 'llm-code-format';
+import { parseMarkdownFiles, serializeMarkdownFiles } from "llm-code-format";
 
 // Parse Markdown content containing code blocks
 const markdownString = `
@@ -52,8 +53,8 @@ console.log(files); // Array of { name, text } objects
 
 // Serialize files back to Markdown
 const files = [
-  { name: 'index.html', text: '<h1>Hello World</h1>' },
-  { name: 'styles.css', text: 'body { color: blue; }' }
+  { name: "index.html", text: "<h1>Hello World</h1>" },
+  { name: "styles.css", text: "body { color: blue; }" },
 ];
 
 const markdown = serializeMarkdownFiles(files);
@@ -64,10 +65,12 @@ const markdown = serializeMarkdownFiles(files);
 ### parseMarkdownFiles(markdownString: string, format?: string)
 
 Parses a Markdown string containing code blocks and returns an object with:
+
 - `files`: Array of `{ name: string, text: string }` objects
 - `format`: String indicating the detected format
 
 Optional `format` parameter to specify a particular format to parse:
+
 - 'backtick-heading'
 - 'file-bold'
 - 'numbered-backtick'
