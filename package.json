@@ -2,7 +2,7 @@
   "name": "llm-code-format",
   "version": "0.2.1",
   "description": "Parsing and serialization of multiple code files in Markdown for LLMs",
-  "type": "module",
+  "type": "commonjs",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
@@ -10,7 +10,7 @@
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
-      "default": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js",
       "types": "./dist/esm/index.d.ts"
     }
   },
