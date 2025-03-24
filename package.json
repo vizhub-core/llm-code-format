@@ -9,13 +9,15 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
     "build": "tsc",
-    "test": "vitest",
-    "prepare": "npm run build"
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -39,7 +41,7 @@
     "README.md"
   ],
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.1"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
   }
 }
