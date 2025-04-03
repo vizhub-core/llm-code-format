@@ -6,11 +6,11 @@ const language = (name: string) => {
 };
 
 export const serializeMarkdownFiles = (
-  files: Array<{ name: string; text: string }>
+  files: Array<{ name: string; text: string }>,
 ) =>
   files
     .map(({ name, text }) =>
-      [`**${name}**\n`, "```" + language(name), text, "```\n"].join("\n")
+      [`**${name}**\n`, "```" + language(name), text, "```\n"].join("\n"),
     )
     .join("\n")
     .trim();

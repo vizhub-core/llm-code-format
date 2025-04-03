@@ -47,9 +47,21 @@ export function parseMarkdownFiles(markdownString: string, format?: string) {
       format: "Standard Heading Format",
       key: "standard-heading",
     },
-    { regex: colonFormatRegex, format: "Colon Format", key: "colon" },
-    { regex: boldFormatRegex, format: "Bold Format", key: "bold" },
-    { regex: hashFormatRegex, format: "Hash Format", key: "hash" },
+    {
+      regex: colonFormatRegex,
+      format: "Colon Format",
+      key: "colon",
+    },
+    {
+      regex: boldFormatRegex,
+      format: "Bold Format",
+      key: "bold",
+    },
+    {
+      regex: hashFormatRegex,
+      format: "Hash Format",
+      key: "hash",
+    },
     {
       regex: numberedBoldFormatRegex,
       format: "Numbered Bold Format",

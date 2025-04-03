@@ -365,7 +365,10 @@ And then we do some work on it and...
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
-    { name: "index.html", text: "<!-- New HTML content -->" },
+    {
+      name: "index.html",
+      text: "<!-- New HTML content -->",
+    },
   ]);
 });
 
@@ -537,7 +540,7 @@ test("parseMarkdownFiles throws error when an unsupported format is specified", 
 \`\`\`
   `;
   expect(() =>
-    parseMarkdownFiles(markdownString, "unsupported-format")
+    parseMarkdownFiles(markdownString, "unsupported-format"),
   ).toThrow("Unsupported format: unsupported-format");
 });
 
@@ -559,7 +562,10 @@ test("parseMarkdownFiles handles duplicate file names in Bold Format when format
   const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
-    { name: "index.html", text: "<!-- New HTML content -->" },
+    {
+      name: "index.html",
+      text: "<!-- New HTML content -->",
+    },
   ]);
 });
 

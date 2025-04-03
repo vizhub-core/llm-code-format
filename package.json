@@ -19,7 +19,9 @@
     "build:esm": "tsc -p tsconfig.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "test": "vitest run",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "prettier": "prettier {*.*,**/*.*} --write"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,7 @@
   ],
   "devDependencies": {
     "typescript": "^5.8.2",
-    "vitest": "^3.0.9"
+    "vitest": "^3.1.1",
+    "prettier": "^3.5.3"
   }
 }
