@@ -34,7 +34,10 @@ npm install llm-code-format
 ### Basic Example Usage
 
 ```typescript
-import { parseMarkdownFiles, serializeMarkdownFiles } from "llm-code-format";
+import {
+  parseMarkdownFiles,
+  serializeMarkdownFiles,
+} from "llm-code-format";
 
 // Parse Markdown content containing code blocks
 const markdownString = `
@@ -51,7 +54,8 @@ body { color: blue; }
 \`\`\`
 `;
 
-const { files, format } = parseMarkdownFiles(markdownString);
+const { files, format } =
+  parseMarkdownFiles(markdownString);
 console.log(format); // "Bold Format"
 console.log(files); // Array of { name, text } objects
 
@@ -82,7 +86,10 @@ fs.readdirSync(blogDir)
   .forEach((fileName) => {
     const postName = fileName.replace(".md", "");
     const filePath = path.join(blogDir, fileName);
-    const markdownString = fs.readFileSync(filePath, "utf8");
+    const markdownString = fs.readFileSync(
+      filePath,
+      "utf8",
+    );
 
     // Use llm-code-format to extract code blocks from markdown!
     const { files } = parseMarkdownFiles(markdownString);
@@ -94,7 +101,10 @@ fs.readdirSync(blogDir)
     }
     fs.mkdirSync(outputDirectory);
     files.forEach(({ name, text }) => {
-      fs.writeFileSync(path.join(outputDirectory, name), text);
+      fs.writeFileSync(
+        path.join(outputDirectory, name),
+        text,
+      );
     });
   });
 ```
