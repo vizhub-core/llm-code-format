@@ -495,10 +495,7 @@ test("parseMarkdownFiles parses Bold Format when format is specified as 'bold'",
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } = parseMarkdownFiles(
-    markdownString,
-    "bold",
-  );
+  const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -528,10 +525,7 @@ test("parseMarkdownFiles returns empty files when format is 'bold' but input doe
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } = parseMarkdownFiles(
-    markdownString,
-    "bold",
-  );
+  const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Unknown Format");
   expect(files).toEqual([]);
 });
@@ -565,10 +559,7 @@ test("parseMarkdownFiles handles duplicate file names in Bold Format when format
 <!-- New HTML content -->
 \`\`\`
   `;
-  const { files, format } = parseMarkdownFiles(
-    markdownString,
-    "bold",
-  );
+  const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     {
@@ -595,10 +586,7 @@ Some additional description or instructions.
 // JavaScript content
 \`\`\`
   `;
-  const { files, format } = parseMarkdownFiles(
-    markdownString,
-    "bold",
-  );
+  const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },

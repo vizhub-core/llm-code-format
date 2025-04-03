@@ -10,9 +10,7 @@ export const serializeMarkdownFiles = (
 ) =>
   files
     .map(({ name, text }) =>
-      [`**${name}**\n`, "```" + language(name), text, "```\n"].join(
-        "\n",
-      ),
+      [`**${name}**\n`, "```" + language(name), text, "```\n"].join("\n"),
     )
     .join("\n")
     .trim();

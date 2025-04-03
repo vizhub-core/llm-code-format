@@ -34,10 +34,7 @@ npm install llm-code-format
 ### Basic Example Usage
 
 ```typescript
-import {
-  parseMarkdownFiles,
-  serializeMarkdownFiles,
-} from "llm-code-format";
+import { parseMarkdownFiles, serializeMarkdownFiles } from "llm-code-format";
 
 // Parse Markdown content containing code blocks
 const markdownString = `

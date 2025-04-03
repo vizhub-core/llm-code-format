@@ -1,8 +1,5 @@
 // parseMarkdownFiles.ts
-export function parseMarkdownFiles(
-  markdownString: string,
-  format?: string,
-) {
+export function parseMarkdownFiles(markdownString: string, format?: string) {
   const files = [];
 
   const backtickHeadingRegex =
@@ -15,8 +12,7 @@ export function parseMarkdownFiles(
     /^\s*###\s*(?!`|File:|\d+\.)\s*([^\n`]+?)\s*\n```(?:\w+)?\n([\s\S]*?)```/gm;
   const colonFormatRegex =
     /^\s*(?!###|\*\*|`)([^\n#*`]+?):\s*\n```(?:\w+)?\n([\s\S]*?)```/gm;
-  const hashFormatRegex =
-    /^\s*# ([^\n`]+?)\s*\n```(?:\w+)?\n([\s\S]*?)```/gm;
+  const hashFormatRegex = /^\s*# ([^\n`]+?)\s*\n```(?:\w+)?\n([\s\S]*?)```/gm;
   const boldFormatRegex =
     /^\s*(?!###)\*\*([^\n*`]+?)\*\*(?:[^\n]*)\s*\n```(?:\w+)?\n([\s\S]*?)```/gm;
   const headingBoldFormatRegex =
@@ -89,8 +85,7 @@ export function parseMarkdownFiles(
   // Process each format and stop after the first matching format
   for (const { regex, format: fmt } of selectedRegexes) {
     regex.lastIndex = 0; // Reset regex index
-    const matches: Record<string, { name: string; text: string }> =
-      {};
+    const matches: Record<string, { name: string; text: string }> = {};
     let match;
 
     while ((match = regex.exec(markdownString)) !== null) {

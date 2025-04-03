@@ -62,16 +62,11 @@ describe("StreamingMarkdownParser", () => {
       { name: "index.html", format: "Bold Format" },
       { name: "styles.css", format: "Bold Format" },
     ]);
-    expect(codeLines).toEqual([
-      "<html>",
-      "</html>",
-      "body { color: blue; }",
-    ]);
+    expect(codeLines).toEqual(["<html>", "</html>", "body { color: blue; }"]);
   });
 
   it("should handle code fence markers with language specifiers", () => {
-    const input =
-      "**script.js**\n```js\nconsole.log('Hello');\n```\n";
+    const input = "**script.js**\n```js\nconsole.log('Hello');\n```\n";
     parser.processChunk(input);
     parser.flushRemaining();
 
@@ -121,11 +116,7 @@ describe("StreamingMarkdownParser", () => {
       { name: "styles.css", format: "Bold Format" },
     ]);
 
-    expect(codeLines).toEqual([
-      "<html>",
-      "</html>",
-      "body { color: blue; }",
-    ]);
+    expect(codeLines).toEqual(["<html>", "</html>", "body { color: blue; }"]);
   });
 
   it("should handle bold format with extra text", () => {
