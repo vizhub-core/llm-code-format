@@ -18,6 +18,7 @@ A TypeScript library for parsing and serializing multiple code files in Markdown
   - Numbered Bold Format (`1. **filename.js**`)
   - Numbered Backtick Format (`### 1. `filename.js``)
 
+- Streaming parser for real-time code editing views
 - Serialize code files back to Markdown in a consistent format
 - TypeScript support with full type definitions
 - Zero dependencies
@@ -123,6 +124,56 @@ Optional `format` parameter to specify a particular format to parse:
 ### serializeMarkdownFiles(files: Array<{ name: string, text: string }>)
 
 Converts an array of file objects into a Markdown string using the Bold Format.
+
+### StreamingMarkdownParser
+
+A streaming parser that processes Markdown content chunk by chunk, emitting callbacks when file names or code blocks are detected. This is particularly useful for real-time code editing views where users can see LLMs edit specific files as they generate content.
+
+```typescript
+import { StreamingMarkdownParser, StreamingParserCallbacks } from "llm-code-format";
+
+// Define callbacks for file name changes and code lines
+const callbacks: StreamingParserCallbacks = {
+  onFileNameChange: (fileName, format) => {
+    console.log(`File changed to: ${fileName} (${format})`);
+    // Update UI to show the current file being edited
+  },
+  onCodeLine: (line) => {
+    console.log(`Code line: ${line}`);
+    // Append the line to the current file's content in the UI
+  }
+};
+
+// Create a new parser instance with the callbacks
+const parser = new StreamingMarkdownParser(callbacks);
+
+// Process chunks as they arrive (e.g., from an LLM streaming response)
+parser.processChunk("**index.html**\n");
+parser.processChunk("```html\n");
+parser.processChunk("<h1>Hello World</h1>\n");
+parser.processChunk("</html>\n");
+parser.processChunk("```\n");
+
+// Flush any remaining content when the stream ends
+parser.flushRemaining();
+```
+
+#### Methods
+
+- **constructor(callbacks: StreamingParserCallbacks)**: Creates a new parser instance with the specified callbacks.
+- **processChunk(chunk: string)**: Processes a chunk of text from the stream.
+- **flushRemaining()**: Processes any remaining content in the buffer after the stream has ended.
+
+#### Callback Interface
+
+```typescript
+type StreamingParserCallbacks = {
+  onFileNameChange: (fileName: string, format: string) => void;
+  onCodeLine: (line: string) => void;
+};
+```
+
+Currently, the streaming parser only supports the "Bold Format" (`**filename.js**`), but is designed to be extensible for supporting additional formats in the future.
 
 ## License
 
