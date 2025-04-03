@@ -28,8 +28,7 @@ describe("StreamingMarkdownParser", () => {
   });
 
   it("should process a complete markdown block in one chunk", () => {
-    const input =
-      "**index.html**\n```\n<html>\n</html>\n```\n";
+    const input = "**index.html**\n```\n<html>\n</html>\n```\n";
     parser.processChunk(input);
     parser.flushRemaining();
 

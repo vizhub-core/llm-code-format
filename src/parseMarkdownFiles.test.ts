@@ -22,8 +22,7 @@ test("parseMarkdownFiles detects Bold Format and parses files", () => {
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -52,8 +51,7 @@ test("parseMarkdownFiles detects Bold Format with extra text and parses files", 
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -82,8 +80,7 @@ test("parseMarkdownFiles detects Backtick-Heading Format and parses files", () =
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Backtick-Heading Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -112,8 +109,7 @@ test("parseMarkdownFiles detects Standard Heading Format and parses files", () =
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Standard Heading Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -139,8 +135,7 @@ styles.css:
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Colon Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -169,8 +164,7 @@ test("parseMarkdownFiles detects Bold Format and parses files", () => {
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -199,8 +193,7 @@ test("parseMarkdownFiles detects File Bold Format and parses files", () => {
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("File Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -229,8 +222,7 @@ test("parseMarkdownFiles detects Heading Bold Format and parses files", () => {
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Heading Bold Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -254,8 +246,7 @@ This file contains the CSS for styling the scatter plot.
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Numbered Bold Format");
   expect(files).toEqual([
     {
@@ -286,8 +277,7 @@ test("parseMarkdownFiles detects Numbered Bold Format with extra text", () => {
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Numbered Bold Format");
   expect(files).toEqual([
     {
@@ -316,8 +306,7 @@ This file contains the CSS for styling the scatter plot.
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Numbered Backtick Format");
   expect(files).toEqual([
     {
@@ -348,8 +337,7 @@ test("parseMarkdownFiles detects Hash Format and parses files", () => {
 /* CSS content */
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Hash Format");
   expect(files).toEqual([
     { name: "index.html", text: "<!-- HTML content -->" },
@@ -374,8 +362,7 @@ And then we do some work on it and...
 <!-- New HTML content -->
 \`\`\`
   `;
-  const { files, format } =
-    parseMarkdownFiles(markdownString);
+  const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
   expect(files).toEqual([
     {
@@ -559,10 +546,7 @@ test("parseMarkdownFiles throws error when an unsupported format is specified", 
 \`\`\`
   `;
   expect(() =>
-    parseMarkdownFiles(
-      markdownString,
-      "unsupported-format",
-    ),
+    parseMarkdownFiles(markdownString, "unsupported-format"),
   ).toThrow("Unsupported format: unsupported-format");
 });
 

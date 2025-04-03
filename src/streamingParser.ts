@@ -4,10 +4,7 @@ export type StreamingParserCallbacks = {
    * @param fileName - The detected file name.
    * @param format - The header format that was matched.
    */
-  onFileNameChange: (
-    fileName: string,
-    format: string,
-  ) => void;
+  onFileNameChange: (fileName: string, format: string) => void;
 
   /**
    * Called for each line emitted from inside a code fence.
@@ -51,9 +48,7 @@ export class StreamingMarkdownParser {
     this.buffer += chunk;
     let newlineIndex: number;
 
-    while (
-      (newlineIndex = this.buffer.indexOf("\n")) !== -1
-    ) {
+    while ((newlineIndex = this.buffer.indexOf("\n")) !== -1) {
       const line = this.buffer.slice(0, newlineIndex);
       this.buffer = this.buffer.slice(newlineIndex + 1);
       this.processLine(line);

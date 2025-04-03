@@ -77,9 +77,7 @@ export function parseMarkdownFiles(
 
   if (format) {
     // Find the regex that matches the specified format
-    const formatRegexEntry = regexes.find(
-      (r) => r.key === format,
-    );
+    const formatRegexEntry = regexes.find((r) => r.key === format);
     if (!formatRegexEntry) {
       throw new Error(`Unsupported format: ${format}`);
     }
@@ -91,10 +89,8 @@ export function parseMarkdownFiles(
   // Process each format and stop after the first matching format
   for (const { regex, format: fmt } of selectedRegexes) {
     regex.lastIndex = 0; // Reset regex index
-    const matches: Record<
-      string,
-      { name: string; text: string }
-    > = {};
+    const matches: Record<string, { name: string; text: string }> =
+      {};
     let match;
 
     while ((match = regex.exec(markdownString)) !== null) {
