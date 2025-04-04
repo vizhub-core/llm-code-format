@@ -11,6 +11,12 @@ export type StreamingParserCallbacks = {
    * @param line - A line of code from the code block.
    */
   onCodeLine: (line: string) => void;
+
+  /**
+   * Called for each line outside code fences that is not a file header.
+   * @param line - A line of text that is not code or a file header.
+   */
+  onNonCodeLine?: (line: string) => void;
 };
 
 export class StreamingMarkdownParser {
@@ -96,7 +102,19 @@ export class StreamingMarkdownParser {
           break; // Stop after the first matching header is found.
         }
       }
-      // Non-header lines outside code fences are ignored
+      // Non-header lines outside code fences
+      let isHeader = false;
+      for (const { regex } of this.headerPatterns) {
+        if (regex.test(line)) {
+          isHeader = true;
+          break;
+        }
+      }
+
+      // If it's not a header and the callback exists, call it
+      if (!isHeader && this.callbacks.onNonCodeLine) {
+        this.callbacks.onNonCodeLine(line);
+      }
     }
   }
 }
