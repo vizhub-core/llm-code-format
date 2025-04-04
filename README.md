@@ -187,10 +187,6 @@ type StreamingParserCallbacks = {
 
 Currently, the streaming parser only supports the "Bold Format" (`**filename.js**`), but is designed to be extensible for supporting additional formats in the future.
 
-## License
-
-MIT © Curran Kelleher
-
 ## Contributing
 
 Contributions welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines before submitting a PR. All changes should start with creating an issue first.
