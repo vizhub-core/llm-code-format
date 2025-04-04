@@ -1,6 +1,6 @@
-export { parseMarkdownFiles } from "./parseMarkdownFiles";
-export { serializeMarkdownFiles } from "./serializeMarkdownFiles";
+export { parseMarkdownFiles } from "./parseMarkdownFiles.js";
+export { serializeMarkdownFiles } from "./serializeMarkdownFiles.js";
 export {
   StreamingMarkdownParser,
   StreamingParserCallbacks,
-} from "./streamingParser";
+} from "./streamingParser.js";
