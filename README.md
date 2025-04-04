@@ -129,10 +129,13 @@ Converts an array of file objects into a Markdown string using the Bold Format.
 
 A streaming parser that processes Markdown content chunk by chunk, emitting callbacks when file names or code blocks are detected. This is particularly useful for real-time code editing views where users can see LLMs edit specific files as they generate content.
 
-```typescript
-import { StreamingMarkdownParser, StreamingParserCallbacks } from "llm-code-format";
+````typescript
+import {
+  StreamingMarkdownParser,
+  StreamingParserCallbacks,
+} from "llm-code-format";
 
-// Define callbacks for file name changes and code lines
+// Define callbacks for file name changes, code lines, and non-code lines
 const callbacks: StreamingParserCallbacks = {
   onFileNameChange: (fileName, format) => {
     console.log(`File changed to: ${fileName} (${format})`);
@@ -141,7 +144,11 @@ const callbacks: StreamingParserCallbacks = {
   onCodeLine: (line) => {
     console.log(`Code line: ${line}`);
     // Append the line to the current file's content in the UI
-  }
+  },
+  onNonCodeLine: (line) => {
+    console.log(`Comment/text: ${line}`);
+    // Process non-code, non-header lines (e.g., for displaying comments)
+  },
 };
 
 // Create a new parser instance with the callbacks
@@ -156,7 +163,7 @@ parser.processChunk("```\n");
 
 // Flush any remaining content when the stream ends
 parser.flushRemaining();
-```
+````
 
 #### Methods
 
@@ -170,8 +177,13 @@ parser.flushRemaining();
 type StreamingParserCallbacks = {
   onFileNameChange: (fileName: string, format: string) => void;
   onCodeLine: (line: string) => void;
+  onNonCodeLine?: (line: string) => void;
 };
 ```
+
+- **onFileNameChange**: Called when a file header is detected outside a code fence.
+- **onCodeLine**: Called for each line emitted from inside a code fence.
+- **onNonCodeLine**: Called for each line outside code fences that is not a file header.
 
 Currently, the streaming parser only supports the "Bold Format" (`**filename.js**`), but is designed to be extensible for supporting additional formats in the future.
 

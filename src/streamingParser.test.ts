@@ -10,6 +10,7 @@ describe("StreamingMarkdownParser", () => {
     format: string;
   }>;
   let codeLines: string[];
+  let nonCodeLines: string[];
   let parser: StreamingMarkdownParser;
 
   const callbacks: StreamingParserCallbacks = {
@@ -19,11 +20,15 @@ describe("StreamingMarkdownParser", () => {
     onCodeLine: (line) => {
       codeLines.push(line);
     },
+    onNonCodeLine: (line) => {
+      nonCodeLines.push(line);
+    },
   };
 
   beforeEach(() => {
     fileNameChanges = [];
     codeLines = [];
+    nonCodeLines = [];
     parser = new StreamingMarkdownParser(callbacks);
   });
 
@@ -86,13 +91,14 @@ describe("StreamingMarkdownParser", () => {
     ]);
   });
 
-  it("should not trigger callbacks for irrelevant lines outside code fences", () => {
+  it("should not trigger file name or code callbacks for irrelevant lines outside code fences", () => {
     // Provide a line that doesn't match any header or code fence
     parser.processChunk("This is an irrelevant line\n");
     parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([]);
     expect(codeLines).toEqual([]);
+    expect(nonCodeLines).toEqual(["This is an irrelevant line"]);
   });
 
   it("should handle nested chunks with header and code block boundaries", () => {
@@ -117,6 +123,7 @@ describe("StreamingMarkdownParser", () => {
     ]);
 
     expect(codeLines).toEqual(["<html>", "</html>", "body { color: blue; }"]);
+    expect(nonCodeLines).toEqual(["Some irrelevant line"]);
   });
 
   it("should handle bold format with extra text", () => {
@@ -129,5 +136,28 @@ describe("StreamingMarkdownParser", () => {
       { name: "index.html", format: "Bold Format" },
     ]);
     expect(codeLines).toEqual(["<html>", "</html>"]);
+  });
+  it("should capture all non-code, non-header lines", () => {
+    const input =
+      "This is a regular text line\n" +
+      "**index.html**\n" +
+      "This is a comment about the file\n" +
+      "```\n<html>\n</html>\n```\n" +
+      "Another comment line\n" +
+      "And one more line\n";
+
+    parser.processChunk(input);
+    parser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "index.html", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual(["<html>", "</html>"]);
+    expect(nonCodeLines).toEqual([
+      "This is a regular text line",
+      "This is a comment about the file",
+      "Another comment line",
+      "And one more line",
+    ]);
   });
 });
