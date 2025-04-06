@@ -54,13 +54,13 @@ body { color: blue; }
 
 const { files, format } = parseMarkdownFiles(markdownString);
 console.log(format); // "Bold Format"
-console.log(files); // Array of { name, text } objects
+console.log(files); // Object with filenames as keys and contents as values
 
 // Serialize files back to Markdown
-const files = [
-  { name: "index.html", text: "<h1>Hello World</h1>" },
-  { name: "styles.css", text: "body { color: blue; }" },
-];
+const files = {
+  "index.html": "<h1>Hello World</h1>",
+  "styles.css": "body { color: blue; }",
+};
 
 const markdown = serializeMarkdownFiles(files);
 ```
@@ -88,14 +88,14 @@ fs.readdirSync(blogDir)
     // Use llm-code-format to extract code blocks from markdown!
     const { files } = parseMarkdownFiles(markdownString);
 
-    if (!files.length) return;
+    if (Object.keys(files).length === 0) return;
     const outputDirectory = path.join(publicDir, postName);
     if (fs.existsSync(outputDirectory)) {
       fs.rmSync(outputDirectory, { recursive: true });
     }
     fs.mkdirSync(outputDirectory);
-    files.forEach(({ name, text }) => {
-      fs.writeFileSync(path.join(outputDirectory, name), text);
+    Object.entries(files).forEach(([name, content]) => {
+      fs.writeFileSync(path.join(outputDirectory, name), content);
     });
   });
 ```
@@ -106,7 +106,7 @@ fs.readdirSync(blogDir)
 
 Parses a Markdown string containing code blocks and returns an object with:
 
-- `files`: Array of `{ name: string, text: string }` objects
+- `files`: Object with filenames as keys and file contents as values
 - `format`: String indicating the detected format
 
 Optional `format` parameter to specify a particular format to parse:
@@ -121,9 +121,9 @@ Optional `format` parameter to specify a particular format to parse:
 - 'hash'
 - 'numbered-bold'
 
-### serializeMarkdownFiles(files: Array<{ name: string, text: string }>)
+### serializeMarkdownFiles(files: FileCollection)
 
-Converts an array of file objects into a Markdown string using the Bold Format.
+Converts a FileCollection object into a Markdown string using the Bold Format.
 
 ### StreamingMarkdownParser
 

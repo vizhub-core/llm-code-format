@@ -1,6 +1,11 @@
 // parseMarkdownFiles.ts
-export function parseMarkdownFiles(markdownString: string, format?: string) {
-  const files = [];
+import { FileCollection } from "@vizhub/viz-types";
+
+export function parseMarkdownFiles(
+  markdownString: string,
+  format?: string,
+): { files: FileCollection; format: string } {
+  const files: FileCollection = {};
 
   const backtickHeadingRegex =
     /^\s*###\s*`([^`]+)`\s*\n```(?:\w+)?\n([\s\S]*?)```/gm;
@@ -85,17 +90,17 @@ export function parseMarkdownFiles(markdownString: string, format?: string) {
   // Process each format and stop after the first matching format
   for (const { regex, format: fmt } of selectedRegexes) {
     regex.lastIndex = 0; // Reset regex index
-    const matches: Record<string, { name: string; text: string }> = {};
+    const matches: Record<string, string> = {};
     let match;
 
     while ((match = regex.exec(markdownString)) !== null) {
       const name = match[1].trim();
       const code = match[2].trim();
-      matches[name] = { name, text: code };
+      matches[name] = code;
     }
 
     if (Object.keys(matches).length > 0) {
-      files.push(...Object.values(matches));
+      Object.assign(files, matches);
       detectedFormat = fmt;
       break; // Stop after the first matching format
     }

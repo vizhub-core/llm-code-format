@@ -24,11 +24,11 @@ test("parseMarkdownFiles detects Bold Format and parses files", () => {
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Bold Format with extra text and parses files", () => {
@@ -53,11 +53,11 @@ test("parseMarkdownFiles detects Bold Format with extra text and parses files", 
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Backtick-Heading Format and parses files", () => {
@@ -82,11 +82,11 @@ test("parseMarkdownFiles detects Backtick-Heading Format and parses files", () =
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Backtick-Heading Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Standard Heading Format and parses files", () => {
@@ -111,11 +111,11 @@ test("parseMarkdownFiles detects Standard Heading Format and parses files", () =
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Standard Heading Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Colon Format and parses files", () => {
@@ -137,11 +137,11 @@ styles.css:
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Colon Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Bold Format and parses files", () => {
@@ -166,11 +166,11 @@ test("parseMarkdownFiles detects Bold Format and parses files", () => {
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects File Bold Format and parses files", () => {
@@ -195,11 +195,11 @@ test("parseMarkdownFiles detects File Bold Format and parses files", () => {
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("File Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Heading Bold Format and parses files", () => {
@@ -224,11 +224,11 @@ test("parseMarkdownFiles detects Heading Bold Format and parses files", () => {
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Heading Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Numbered Bold Format and parses files", () => {
@@ -248,16 +248,10 @@ This file contains the CSS for styling the scatter plot.
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Numbered Bold Format");
-  expect(files).toEqual([
-    {
-      name: "index.html",
-      text: `<!-- HTML content -->`,
-    },
-    {
-      name: "style.css",
-      text: `/* CSS content */`,
-    },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "style.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Numbered Bold Format with extra text", () => {
@@ -279,16 +273,10 @@ test("parseMarkdownFiles detects Numbered Bold Format with extra text", () => {
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Numbered Bold Format");
-  expect(files).toEqual([
-    {
-      name: "index.html",
-      text: `<!-- HTML content -->`,
-    },
-    {
-      name: "style.css",
-      text: `/* CSS content */`,
-    },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "style.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Numbered Backtick Format and parses files", () => {
@@ -308,16 +296,10 @@ This file contains the CSS for styling the scatter plot.
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Numbered Backtick Format");
-  expect(files).toEqual([
-    {
-      name: "index.html",
-      text: `<!-- HTML content -->`,
-    },
-    {
-      name: "style.css",
-      text: `/* CSS content */`,
-    },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "style.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles detects Hash Format and parses files", () => {
@@ -339,11 +321,11 @@ test("parseMarkdownFiles detects Hash Format and parses files", () => {
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Hash Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 test("parseMarkdownFiles should use final version", () => {
@@ -364,12 +346,9 @@ And then we do some work on it and...
   `;
   const { files, format } = parseMarkdownFiles(markdownString);
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    {
-      name: "index.html",
-      text: "<!-- New HTML content -->",
-    },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- New HTML content -->",
+  });
 });
 
 const content = ` To create a scatter plot with D3.js, follow these steps:
@@ -458,20 +437,14 @@ test("parseMarkdownFiles work with real output from Mistral", () => {
   const { files, format } = parseMarkdownFiles(content);
   // console.log(JSON.stringify(files, null, 2));
   expect(format).toBe("Numbered Bold Format");
-  expect(files).toEqual([
-    {
-      name: "index.html",
-      text: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Scatter Plot with D3.js</title>\n  <script src="https://d3js.org/d3.v6.min.js"></script>\n  <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n  <div id="scatter-plot"></div>\n  <script src="index.js"></script>\n</body>\n</html>',
-    },
-    {
-      name: "styles.css",
-      text: "/* styles.css */\nbody, html {\n  height: 102%;\n  padding: 0;\n}\n\n#scatter-plot {\n  width: 100%;\n  height: 100%;\n}",
-    },
-    {
-      name: "index.js",
-      text: '// index.js\n\nd3.select("body")\n  .append("div")\n  .attr("id", "scatter-plot");\n\n// Load data\nconst data = d3.randomN(500, (x, y) => ({x, y}));\n\n// Create SVG container\nconst svg = d3.select("#scatter-plot")\n  .append("svg")\n  .attr("width", "100%")\n  .attr("height", "100%");\n\n// Scales X and Y axes\nconst xInfo = d3.scaleLinear()\n  .domain(d3.extent(data, d => d.x))\n  .range([0, svg.node().width]);\nconst yInfo = d3.scaleLinear()\n  .domain(d3.extent(data, d => d.y))\n  .range([svg.node().height, 0]);\n\n// Create circles and color them based on their distances from the axes\nsvg.selectAll("circle")\n  .data(data)\n  .enter()\n  .append("circle")\n  .attr("cx", d => xInfo(d.x))\n  .attr("cy", d => yInfo(d.y))\n  .attr("r", 4)\n  .attr("fill", "steelblue")\n  .on("mousemove", function(event, d) {\n    // Change color of circles based on their distances from the axes\n    const xDistance = Math.abs(data.average(d => d.x) - d3.mouse(this).x);\n    const yDistance = Math.abs(data.average(d => d.y) - d3.mouse(this).y);\n    d3.select(this)\n      .style("fill", `steelblue${yDistance > xDistance ? "20%" : ""}`);\n  });',
-    },
-  ]);
+  expect(files).toEqual({
+    "index.html":
+      '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Scatter Plot with D3.js</title>\n  <script src="https://d3js.org/d3.v6.min.js"></script>\n  <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n  <div id="scatter-plot"></div>\n  <script src="index.js"></script>\n</body>\n</html>',
+    "styles.css":
+      "/* styles.css */\nbody, html {\n  height: 102%;\n  padding: 0;\n}\n\n#scatter-plot {\n  width: 100%;\n  height: 100%;\n}",
+    "index.js":
+      '// index.js\n\nd3.select("body")\n  .append("div")\n  .attr("id", "scatter-plot");\n\n// Load data\nconst data = d3.randomN(500, (x, y) => ({x, y}));\n\n// Create SVG container\nconst svg = d3.select("#scatter-plot")\n  .append("svg")\n  .attr("width", "100%")\n  .attr("height", "100%");\n\n// Scales X and Y axes\nconst xInfo = d3.scaleLinear()\n  .domain(d3.extent(data, d => d.x))\n  .range([0, svg.node().width]);\nconst yInfo = d3.scaleLinear()\n  .domain(d3.extent(data, d => d.y))\n  .range([svg.node().height, 0]);\n\n// Create circles and color them based on their distances from the axes\nsvg.selectAll("circle")\n  .data(data)\n  .enter()\n  .append("circle")\n  .attr("cx", d => xInfo(d.x))\n  .attr("cy", d => yInfo(d.y))\n  .attr("r", 4)\n  .attr("fill", "steelblue")\n  .on("mousemove", function(event, d) {\n    // Change color of circles based on their distances from the axes\n    const xDistance = Math.abs(data.average(d => d.x) - d3.mouse(this).x);\n    const yDistance = Math.abs(data.average(d => d.y) - d3.mouse(this).y);\n    d3.select(this)\n      .style("fill", `steelblue${yDistance > xDistance ? "20%" : ""}`);\n  });',
+  });
 });
 
 // Test that parses correctly when the format is 'bold' and the input matches 'Bold Format'
@@ -497,11 +470,11 @@ test("parseMarkdownFiles parses Bold Format when format is specified as 'bold'",
   `;
   const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  });
 });
 
 // Test that returns empty files when format is 'bold' but the input does not match 'Bold Format'
@@ -527,7 +500,7 @@ test("parseMarkdownFiles returns empty files when format is 'bold' but input doe
   `;
   const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Unknown Format");
-  expect(files).toEqual([]);
+  expect(files).toEqual({});
 });
 
 // Test that throws an error when an unsupported format is specified
@@ -561,12 +534,9 @@ test("parseMarkdownFiles handles duplicate file names in Bold Format when format
   `;
   const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    {
-      name: "index.html",
-      text: "<!-- New HTML content -->",
-    },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- New HTML content -->",
+  });
 });
 
 // Test that parses correctly when additional text is present between code blocks in Bold Format
@@ -588,8 +558,8 @@ Some additional description or instructions.
   `;
   const { files, format } = parseMarkdownFiles(markdownString, "bold");
   expect(format).toBe("Bold Format");
-  expect(files).toEqual([
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-  ]);
+  expect(files).toEqual({
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+  });
 });

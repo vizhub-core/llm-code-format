@@ -5,11 +5,11 @@ import { serializeMarkdownFiles } from "./serializeMarkdownFiles";
 // Tests for parseMarkdownFiles function with different formats
 
 test("serializeMarkdownFiles outputs bold format", () => {
-  const files = [
-    { name: "index.html", text: "<!-- HTML content -->" },
-    { name: "script.js", text: "// JavaScript content" },
-    { name: "styles.css", text: "/* CSS content */" },
-  ];
+  const files = {
+    "index.html": "<!-- HTML content -->",
+    "script.js": "// JavaScript content",
+    "styles.css": "/* CSS content */",
+  };
   const markdownString = serializeMarkdownFiles(files);
 
   expect(markdownString).toBe(`**index.html**
