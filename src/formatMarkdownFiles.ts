@@ -7,7 +7,7 @@ const language = (name: string) => {
 
 import { FileCollection } from "@vizhub/viz-types";
 
-export const serializeMarkdownFiles = (files: FileCollection) =>
+export const formatMarkdownFiles = (files: FileCollection) =>
   Object.entries(files)
     .map(([name, text]) =>
       [`**${name}**\n`, "```" + language(name), text, "```\n"].join("\n"),

@@ -37,7 +37,7 @@ npm install llm-code-format
 ### Basic Example Usage
 
 ```typescript
-import { parseMarkdownFiles, serializeMarkdownFiles } from "llm-code-format";
+import { parseMarkdownFiles, formatMarkdownFiles } from "llm-code-format";
 
 // Parse Markdown content containing code blocks
 const markdownString = `
@@ -64,7 +64,7 @@ const files = {
   "styles.css": "body { color: blue; }",
 };
 
-const markdown = serializeMarkdownFiles(files);
+const markdown = formatMarkdownFiles(files);
 ```
 
 ### Recipe: Extract Files from Blog Posts
@@ -123,7 +123,7 @@ Optional `format` parameter to specify a particular format to parse:
 - 'hash'
 - 'numbered-bold'
 
-### serializeMarkdownFiles(files: FileCollection)
+### formatMarkdownFiles(files: FileCollection)
 
 Converts a FileCollection object into a Markdown string using the Bold Format.
 
