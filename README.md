@@ -9,7 +9,6 @@ See also [editcodewithai](https://github.com/vizhub-core/editcodewithai), a high
 ## Features
 
 - Parse code blocks from various Markdown formats including:
-
   - Bold Format (`**filename.js**`)
   - Backtick-Heading Format (`### `filename.js``)
   - Standard Heading Format (`### filename.js`)
