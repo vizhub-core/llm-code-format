@@ -3,6 +3,7 @@ import {
   StreamingMarkdownParser,
   StreamingParserCallbacks,
 } from "./streamingParser";
+import { sampleStreams } from "./sampleStreams";
 
 describe("StreamingMarkdownParser", () => {
   let fileNameChanges: Array<{
@@ -159,5 +160,60 @@ describe("StreamingMarkdownParser", () => {
       "Another comment line",
       "And one more line",
     ]);
+  });
+
+  it("should process sample streams and match expected files", () => {
+    sampleStreams.forEach((sampleStream, index) => {
+      // Reset state for each sample stream
+      const fileContents: Record<string, string[]> = {};
+      let currentFileName: string | null = null;
+
+      const streamCallbacks: StreamingParserCallbacks = {
+        onFileNameChange: (fileName, format) => {
+          currentFileName = fileName;
+          if (!fileContents[fileName]) {
+            fileContents[fileName] = [];
+          }
+        },
+        onCodeLine: (line) => {
+          if (currentFileName) {
+            fileContents[currentFileName].push(line);
+          }
+        },
+        onNonCodeLine: () => {
+          // Non-code lines are not part of file contents
+        },
+      };
+
+      const streamParser = new StreamingMarkdownParser(streamCallbacks);
+
+      // Process all chunks in the sample stream
+      sampleStream.chunks.forEach((chunk) => {
+        streamParser.processChunk(chunk);
+      });
+      streamParser.flushRemaining();
+
+      // Convert arrays to strings and compare with expected files
+      const builtFiles: Record<string, string> = {};
+      Object.keys(fileContents).forEach((fileName) => {
+        builtFiles[fileName] = fileContents[fileName].join("\n");
+      });
+
+      // console.log(JSON.stringify(builtFiles, null, 2));
+
+      // Check each expected file
+      Object.keys(sampleStream.expectedFiles).forEach((expectedFileName) => {
+        // console.log(builtFiles[expectedFileName]);
+        expect(builtFiles[expectedFileName]).toBeDefined();
+        expect(builtFiles[expectedFileName]).toBe(
+          sampleStream.expectedFiles[expectedFileName],
+        );
+      });
+
+      // Check that no unexpected files are present
+      Object.keys(builtFiles).forEach((builtFileName) => {
+        expect(sampleStream.expectedFiles[builtFileName]).toBeDefined();
+      });
+    });
   });
 });
