@@ -46,9 +46,9 @@
     "README.md"
   ],
   "devDependencies": {
-    "@vizhub/viz-types": "^0.1.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.2",
-    "vitest": "^3.1.1"
+    "@vizhub/viz-types": "^0.3.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }

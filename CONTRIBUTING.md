@@ -5,13 +5,11 @@ Thank you for your interest in contributing to llm-code-format! We welcome contr
 ## Getting Started
 
 1. **Create an Issue First**
-
    - Before submitting a Pull Request, please create an issue to discuss the changes you'd like to make
    - This helps avoid duplicate work and ensures your contribution aligns with the project's goals
    - Link your PR to the issue when you create it
 
 2. **Fork and Clone**
-
    - Fork the repository on GitHub
    - Clone your fork locally
 
@@ -34,14 +32,12 @@ Thank you for your interest in contributing to llm-code-format! We welcome contr
 ## Development Guidelines
 
 1. **Code Style**
-
    - Use TypeScript
    - Follow existing code formatting
    - Add appropriate comments for complex logic
    - Keep functions focused and modular
 
 2. **Testing**
-
    - Add tests for new features
    - Ensure all tests pass before submitting PR
    - Run tests with `npm test`
@@ -54,14 +50,12 @@ Thank you for your interest in contributing to llm-code-format! We welcome contr
 ## Pull Request Process
 
 1. **Before Submitting**
-
    - Ensure code builds without errors
    - Run all tests
    - Update documentation as needed
    - Add your changes to CHANGELOG.md
 
 2. **PR Guidelines**
-
    - Link to the related issue
    - Provide a clear description of changes
    - Include any necessary documentation updates
