@@ -60,6 +60,35 @@ test("parseMarkdownFiles detects Bold Format with extra text and parses files", 
   });
 });
 
+test("parseMarkdownFiles handles Bold Format with parentheses and extra text", () => {
+  const markdownString = `
+**renderArcs.js (New file)**
+
+\`\`\`javascript
+// JavaScript content for renderArcs
+\`\`\`
+
+**utils.js (Modified)**
+
+\`\`\`javascript
+// JavaScript content for utils
+\`\`\`
+
+**config.json (Configuration file)**
+
+\`\`\`json
+{ "version": "1.0" }
+\`\`\`
+  `;
+  const { files, format } = parseMarkdownFiles(markdownString);
+  expect(format).toBe("Bold Format");
+  expect(files).toEqual({
+    "renderArcs.js": "// JavaScript content for renderArcs",
+    "utils.js": "// JavaScript content for utils",
+    "config.json": '{ "version": "1.0" }',
+  });
+});
+
 test("parseMarkdownFiles detects Backtick-Heading Format and parses files", () => {
   const markdownString = `
 ### \`index.html\`

@@ -95,7 +95,12 @@ export class StreamingMarkdownParser {
       for (const { regex, format } of this.headerPatterns) {
         const match = regex.exec(line);
         if (match) {
-          const fileName = match[1].trim();
+          let fileName = match[1].trim();
+          // For Bold Format, strip out parentheses and any content after them
+          if (format === "Bold Format") {
+            // Remove anything in parentheses and trim
+            fileName = fileName.replace(/\s*\([^)]*\).*$/, "").trim();
+          }
           this.currentFileName = fileName;
           this.detectedFormat = format;
           this.callbacks.onFileNameChange(fileName, format);

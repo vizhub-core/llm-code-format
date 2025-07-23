@@ -138,6 +138,20 @@ describe("StreamingMarkdownParser", () => {
     ]);
     expect(codeLines).toEqual(["<html>", "</html>"]);
   });
+
+  it("should handle bold format with parentheses and strip them", () => {
+    const input =
+      "**renderArcs.js (New file)**\n```\n// JavaScript content\n```\n" +
+      "**utils.js (Modified)**\n```\n// More content\n```\n";
+    parser.processChunk(input);
+    parser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "renderArcs.js", format: "Bold Format" },
+      { name: "utils.js", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual(["// JavaScript content", "// More content"]);
+  });
   it("should capture all non-code, non-header lines", () => {
     const input =
       "This is a regular text line\n" +
