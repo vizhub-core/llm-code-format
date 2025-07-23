@@ -154,7 +154,7 @@ describe("StreamingMarkdownParser", () => {
     ]);
     expect(codeLines).toEqual(["// JavaScript content", "// More content"]);
   });
-  
+
   it("should capture all non-code, non-header lines", async () => {
     const input =
       "This is a regular text line\n" +
