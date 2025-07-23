@@ -15,13 +15,13 @@ describe("StreamingMarkdownParser", () => {
   let parser: StreamingMarkdownParser;
 
   const callbacks: StreamingParserCallbacks = {
-    onFileNameChange: (fileName, format) => {
+    onFileNameChange: async (fileName, format) => {
       fileNameChanges.push({ name: fileName, format });
     },
-    onCodeLine: (line) => {
+    onCodeLine: async (line) => {
       codeLines.push(line);
     },
-    onNonCodeLine: (line) => {
+    onNonCodeLine: async (line) => {
       nonCodeLines.push(line);
     },
   };
@@ -33,10 +33,10 @@ describe("StreamingMarkdownParser", () => {
     parser = new StreamingMarkdownParser(callbacks);
   });
 
-  it("should process a complete markdown block in one chunk", () => {
+  it("should process a complete markdown block in one chunk", async () => {
     const input = "**index.html**\n```\n<html>\n</html>\n```\n";
-    parser.processChunk(input);
-    parser.flushRemaining();
+    await parser.processChunk(input);
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "index.html", format: "Bold Format" },
@@ -44,12 +44,12 @@ describe("StreamingMarkdownParser", () => {
     expect(codeLines).toEqual(["<html>", "</html>"]);
   });
 
-  it("should handle multiple chunks with split lines", () => {
+  it("should handle multiple chunks with split lines", async () => {
     // Simulate splitting a header and code block across chunks
-    parser.processChunk("**inde");
-    parser.processChunk("x.html**\n```\n<ht");
-    parser.processChunk("ml>\n</html>\n```");
-    parser.flushRemaining();
+    await parser.processChunk("**inde");
+    await parser.processChunk("x.html**\n```\n<ht");
+    await parser.processChunk("ml>\n</html>\n```");
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "index.html", format: "Bold Format" },
@@ -57,12 +57,12 @@ describe("StreamingMarkdownParser", () => {
     expect(codeLines).toEqual(["<html>", "</html>"]);
   });
 
-  it("should process multiple files and code blocks", () => {
+  it("should process multiple files and code blocks", async () => {
     const input =
       "**index.html**\n```\n<html>\n</html>\n```\n" +
       "**styles.css**\n```\nbody { color: blue; }\n```\n";
-    parser.processChunk(input);
-    parser.flushRemaining();
+    await parser.processChunk(input);
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "index.html", format: "Bold Format" },
@@ -71,10 +71,10 @@ describe("StreamingMarkdownParser", () => {
     expect(codeLines).toEqual(["<html>", "</html>", "body { color: blue; }"]);
   });
 
-  it("should handle code fence markers with language specifiers", () => {
+  it("should handle code fence markers with language specifiers", async () => {
     const input = "**script.js**\n```js\nconsole.log('Hello');\n```\n";
-    parser.processChunk(input);
-    parser.flushRemaining();
+    await parser.processChunk(input);
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "script.js", format: "Bold Format" },
@@ -82,27 +82,27 @@ describe("StreamingMarkdownParser", () => {
     expect(codeLines).toEqual(["console.log('Hello');"]);
   });
 
-  it("should flush remaining partial lines on flushRemaining", () => {
+  it("should flush remaining partial lines on flushRemaining", async () => {
     // Provide a header line without a trailing newline
-    parser.processChunk("**partial.html**");
-    parser.flushRemaining();
+    await parser.processChunk("**partial.html**");
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "partial.html", format: "Bold Format" },
     ]);
   });
 
-  it("should not trigger file name or code callbacks for irrelevant lines outside code fences", () => {
+  it("should not trigger file name or code callbacks for irrelevant lines outside code fences", async () => {
     // Provide a line that doesn't match any header or code fence
-    parser.processChunk("This is an irrelevant line\n");
-    parser.flushRemaining();
+    await parser.processChunk("This is an irrelevant line\n");
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([]);
     expect(codeLines).toEqual([]);
     expect(nonCodeLines).toEqual(["This is an irrelevant line"]);
   });
 
-  it("should handle nested chunks with header and code block boundaries", () => {
+  it("should handle nested chunks with header and code block boundaries", async () => {
     // Simulate a stream with multiple boundaries and chunk splits
     const chunks = [
       "**index.html**\n", // Header detected
@@ -115,8 +115,10 @@ describe("StreamingMarkdownParser", () => {
       " blue; }\n```\n", // End code fence
     ];
 
-    chunks.forEach((chunk) => parser.processChunk(chunk));
-    parser.flushRemaining();
+    for (const chunk of chunks) {
+      await parser.processChunk(chunk);
+    }
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "index.html", format: "Bold Format" },
@@ -127,11 +129,11 @@ describe("StreamingMarkdownParser", () => {
     expect(nonCodeLines).toEqual(["Some irrelevant line"]);
   });
 
-  it("should handle bold format with extra text", () => {
+  it("should handle bold format with extra text", async () => {
     const input =
       "**index.html** (some commentary)\n```\n<html>\n</html>\n```\n";
-    parser.processChunk(input);
-    parser.flushRemaining();
+    await parser.processChunk(input);
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "index.html", format: "Bold Format" },
@@ -139,12 +141,12 @@ describe("StreamingMarkdownParser", () => {
     expect(codeLines).toEqual(["<html>", "</html>"]);
   });
 
-  it("should handle bold format with parentheses and strip them", () => {
+  it("should handle bold format with parentheses and strip them", async () => {
     const input =
       "**renderArcs.js (New file)**\n```\n// JavaScript content\n```\n" +
       "**utils.js (Modified)**\n```\n// More content\n```\n";
-    parser.processChunk(input);
-    parser.flushRemaining();
+    await parser.processChunk(input);
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "renderArcs.js", format: "Bold Format" },
@@ -152,7 +154,8 @@ describe("StreamingMarkdownParser", () => {
     ]);
     expect(codeLines).toEqual(["// JavaScript content", "// More content"]);
   });
-  it("should capture all non-code, non-header lines", () => {
+  
+  it("should capture all non-code, non-header lines", async () => {
     const input =
       "This is a regular text line\n" +
       "**index.html**\n" +
@@ -161,8 +164,8 @@ describe("StreamingMarkdownParser", () => {
       "Another comment line\n" +
       "And one more line\n";
 
-    parser.processChunk(input);
-    parser.flushRemaining();
+    await parser.processChunk(input);
+    await parser.flushRemaining();
 
     expect(fileNameChanges).toEqual([
       { name: "index.html", format: "Bold Format" },
@@ -176,25 +179,25 @@ describe("StreamingMarkdownParser", () => {
     ]);
   });
 
-  it("should process sample streams and match expected files", () => {
-    sampleStreams.forEach((sampleStream, index) => {
+  it("should process sample streams and match expected files", async () => {
+    for (const [index, sampleStream] of sampleStreams.entries()) {
       // Reset state for each sample stream
       const fileContents: Record<string, string[]> = {};
       let currentFileName: string | null = null;
 
       const streamCallbacks: StreamingParserCallbacks = {
-        onFileNameChange: (fileName, format) => {
+        onFileNameChange: async (fileName, format) => {
           currentFileName = fileName;
           if (!fileContents[fileName]) {
             fileContents[fileName] = [];
           }
         },
-        onCodeLine: (line) => {
+        onCodeLine: async (line) => {
           if (currentFileName) {
             fileContents[currentFileName].push(line);
           }
         },
-        onNonCodeLine: () => {
+        onNonCodeLine: async () => {
           // Non-code lines are not part of file contents
         },
       };
@@ -202,10 +205,10 @@ describe("StreamingMarkdownParser", () => {
       const streamParser = new StreamingMarkdownParser(streamCallbacks);
 
       // Process all chunks in the sample stream
-      sampleStream.chunks.forEach((chunk) => {
-        streamParser.processChunk(chunk);
-      });
-      streamParser.flushRemaining();
+      for (const chunk of sampleStream.chunks) {
+        await streamParser.processChunk(chunk);
+      }
+      await streamParser.flushRemaining();
 
       // Convert arrays to strings and compare with expected files
       const builtFiles: Record<string, string> = {};
@@ -228,6 +231,6 @@ describe("StreamingMarkdownParser", () => {
       Object.keys(builtFiles).forEach((builtFileName) => {
         expect(sampleStream.expectedFiles[builtFileName]).toBeDefined();
       });
-    });
+    }
   });
 });
