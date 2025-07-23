@@ -94,7 +94,12 @@ export function parseMarkdownFiles(
     let match;
 
     while ((match = regex.exec(markdownString)) !== null) {
-      const name = match[1].trim();
+      let name = match[1].trim();
+      // For Bold Format, strip out parentheses and any content after them
+      if (fmt === "Bold Format") {
+        // Remove anything in parentheses and trim
+        name = name.replace(/\s*\([^)]*\).*$/, "").trim();
+      }
       const code = match[2].trim();
       matches[name] = code;
     }
