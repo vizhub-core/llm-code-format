@@ -138,17 +138,20 @@ import {
 
 // Define callbacks for file name changes, code lines, and non-code lines
 const callbacks: StreamingParserCallbacks = {
-  onFileNameChange: (fileName, format) => {
+  onFileNameChange: async (fileName, format) => {
     console.log(`File changed to: ${fileName} (${format})`);
-    // Update UI to show the current file being edited
+    // Can now perform async operations like database saves
+    await saveFileMetadata(fileName, format);
   },
-  onCodeLine: (line) => {
+  onCodeLine: async (line) => {
     console.log(`Code line: ${line}`);
-    // Append the line to the current file's content in the UI
+    // Can format code asynchronously
+    await formatAndSaveCodeLine(line);
   },
-  onNonCodeLine: (line) => {
+  onNonCodeLine: async (line) => {
     console.log(`Comment/text: ${line}`);
-    // Process non-code, non-header lines (e.g., for displaying comments)
+    // Can process documentation asynchronously
+    await processDocumentationLine(line);
   },
 };
 
@@ -156,35 +159,35 @@ const callbacks: StreamingParserCallbacks = {
 const parser = new StreamingMarkdownParser(callbacks);
 
 // Process chunks as they arrive (e.g., from an LLM streaming response)
-parser.processChunk("**index.html**\n");
-parser.processChunk("```html\n");
-parser.processChunk("<h1>Hello World</h1>\n");
-parser.processChunk("</html>\n");
-parser.processChunk("```\n");
+await parser.processChunk("**index.html**\n");
+await parser.processChunk("```html\n");
+await parser.processChunk("<h1>Hello World</h1>\n");
+await parser.processChunk("</html>\n");
+await parser.processChunk("```\n");
 
 // Flush any remaining content when the stream ends
-parser.flushRemaining();
+await parser.flushRemaining();
 ````
 
 #### Methods
 
 - **constructor(callbacks: StreamingParserCallbacks)**: Creates a new parser instance with the specified callbacks.
-- **processChunk(chunk: string)**: Processes a chunk of text from the stream.
-- **flushRemaining()**: Processes any remaining content in the buffer after the stream has ended.
+- **processChunk(chunk: string)**: Processes a chunk of text from the stream. Returns a Promise that resolves when all callbacks have completed.
+- **flushRemaining()**: Processes any remaining content in the buffer after the stream has ended. Returns a Promise that resolves when all callbacks have completed.
 
 #### Callback Interface
 
 ```typescript
 type StreamingParserCallbacks = {
-  onFileNameChange: (fileName: string, format: string) => void;
-  onCodeLine: (line: string) => void;
-  onNonCodeLine?: (line: string) => void;
+  onFileNameChange: (fileName: string, format: string) => Promise<void>;
+  onCodeLine: (line: string) => Promise<void>;
+  onNonCodeLine?: (line: string) => Promise<void>;
 };
 ```
 
-- **onFileNameChange**: Called when a file header is detected outside a code fence.
-- **onCodeLine**: Called for each line emitted from inside a code fence.
-- **onNonCodeLine**: Called for each line outside code fences that is not a file header.
+- **onFileNameChange**: Called when a file header is detected outside a code fence. Returns a Promise that should resolve when processing is complete.
+- **onCodeLine**: Called for each line emitted from inside a code fence. Returns a Promise that should resolve when processing is complete.
+- **onNonCodeLine**: Called for each line outside code fences that is not a file header. Returns a Promise that should resolve when processing is complete.
 
 Currently, the streaming parser only supports the "Bold Format" (`**filename.js**`), but is designed to be extensible for supporting additional formats in the future.
 
