@@ -4,19 +4,19 @@ export type StreamingParserCallbacks = {
    * @param fileName - The detected file name.
    * @param format - The header format that was matched.
    */
-  onFileNameChange: (fileName: string, format: string) => void;
+  onFileNameChange: (fileName: string, format: string) => Promise<void>;
 
   /**
    * Called for each line emitted from inside a code fence.
    * @param line - A line of code from the code block.
    */
-  onCodeLine: (line: string) => void;
+  onCodeLine: (line: string) => Promise<void>;
 
   /**
    * Called for each line outside code fences that is not a file header.
    * @param line - A line of text that is not code or a file header.
    */
-  onNonCodeLine?: (line: string) => void;
+  onNonCodeLine?: (line: string) => Promise<void>;
 };
 
 export class StreamingMarkdownParser {
@@ -50,14 +50,14 @@ export class StreamingMarkdownParser {
    * Chunks are buffered until full lines (ending with '\n') are available.
    * @param chunk - A string chunk from the stream.
    */
-  processChunk(chunk: string) {
+  async processChunk(chunk: string) {
     this.buffer += chunk;
     let newlineIndex: number;
 
     while ((newlineIndex = this.buffer.indexOf("\n")) !== -1) {
       const line = this.buffer.slice(0, newlineIndex);
       this.buffer = this.buffer.slice(newlineIndex + 1);
-      this.processLine(line);
+      await this.processLine(line);
     }
   }
 
@@ -65,9 +65,9 @@ export class StreamingMarkdownParser {
    * Flushes any remaining content in the buffer.
    * Should be called once after the stream has ended.
    */
-  flushRemaining() {
+  async flushRemaining() {
     if (this.buffer.length > 0) {
-      this.processLine(this.buffer);
+      await this.processLine(this.buffer);
       this.buffer = "";
     }
   }
@@ -80,7 +80,7 @@ export class StreamingMarkdownParser {
    * and if a match is found, onFileNameChange is invoked.
    * @param line - A single line of text.
    */
-  private processLine(line: string) {
+  private async processLine(line: string) {
     // Check if the line is a code fence marker (could be "```" or "```lang")
     if (line.trim().startsWith("```")) {
       this.insideCodeFence = !this.insideCodeFence;
@@ -89,7 +89,7 @@ export class StreamingMarkdownParser {
 
     if (this.insideCodeFence) {
       // Emit every line inside the code fence as a code line.
-      this.callbacks.onCodeLine(line);
+      await this.callbacks.onCodeLine(line);
     } else {
       // Outside a code fence, check for file header patterns.
       for (const { regex, format } of this.headerPatterns) {
@@ -98,7 +98,7 @@ export class StreamingMarkdownParser {
           const fileName = match[1].trim();
           this.currentFileName = fileName;
           this.detectedFormat = format;
-          this.callbacks.onFileNameChange(fileName, format);
+          await this.callbacks.onFileNameChange(fileName, format);
           break; // Stop after the first matching header is found.
         }
       }
@@ -113,7 +113,7 @@ export class StreamingMarkdownParser {
 
       // If it's not a header and the callback exists, call it
       if (!isHeader && this.callbacks.onNonCodeLine) {
-        this.callbacks.onNonCodeLine(line);
+        await this.callbacks.onNonCodeLine(line);
       }
     }
   }
