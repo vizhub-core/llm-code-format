@@ -181,7 +181,7 @@ describe("StreamingMarkdownParser", () => {
 
   it("should handle file deletion when empty code block is detected", async () => {
     const deletedFiles: string[] = [];
-    
+
     const callbacksWithDelete: StreamingParserCallbacks = {
       onFileNameChange: async (fileName, format) => {
         fileNameChanges.push({ name: fileName, format });
@@ -213,7 +213,7 @@ describe("StreamingMarkdownParser", () => {
 
   it("should handle file deletion with whitespace-only code block", async () => {
     const deletedFiles: string[] = [];
-    
+
     const callbacksWithDelete: StreamingParserCallbacks = {
       onFileNameChange: async (fileName, format) => {
         fileNameChanges.push({ name: fileName, format });
@@ -245,7 +245,7 @@ describe("StreamingMarkdownParser", () => {
 
   it("should not delete file with actual content", async () => {
     const deletedFiles: string[] = [];
-    
+
     const callbacksWithDelete: StreamingParserCallbacks = {
       onFileNameChange: async (fileName, format) => {
         fileNameChanges.push({ name: fileName, format });
@@ -277,7 +277,7 @@ describe("StreamingMarkdownParser", () => {
 
   it("should handle mixed scenario with deletion and normal files", async () => {
     const deletedFiles: string[] = [];
-    
+
     const callbacksWithDelete: StreamingParserCallbacks = {
       onFileNameChange: async (fileName, format) => {
         fileNameChanges.push({ name: fileName, format });
@@ -296,11 +296,11 @@ describe("StreamingMarkdownParser", () => {
     const deleteParser = new StreamingMarkdownParser(callbacksWithDelete);
 
     // Mixed scenario: normal file, deleted file, another normal file
-    const input = 
+    const input =
       "**keepThis.js**\n```\nconsole.log('keep');\n```\n" +
       "**deleteThis.js**\n```\n```\n" +
       "**alsoKeep.css**\n```\nbody { color: red; }\n```\n";
-    
+
     await deleteParser.processChunk(input);
     await deleteParser.flushRemaining();
 
@@ -309,10 +309,7 @@ describe("StreamingMarkdownParser", () => {
       { name: "deleteThis.js", format: "Bold Format" },
       { name: "alsoKeep.css", format: "Bold Format" },
     ]);
-    expect(codeLines).toEqual([
-      "console.log('keep');",
-      "body { color: red; }"
-    ]);
+    expect(codeLines).toEqual(["console.log('keep');", "body { color: red; }"]);
     expect(deletedFiles).toEqual(["deleteThis.js"]);
   });
 
