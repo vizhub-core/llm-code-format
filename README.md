@@ -153,6 +153,11 @@ const callbacks: StreamingParserCallbacks = {
     // Can process documentation asynchronously
     await processDocumentationLine(line);
   },
+  onFileDelete: async (fileName) => {
+    console.log(`File marked for deletion: ${fileName}`);
+    // Handle file deletion when empty code blocks are detected
+    await deleteFile(fileName);
+  },
 };
 
 // Create a new parser instance with the callbacks
@@ -168,6 +173,25 @@ await parser.processChunk("```\n");
 // Flush any remaining content when the stream ends
 await parser.flushRemaining();
 ````
+
+#### Handling File Deletion
+
+The streaming parser can detect when files should be deleted by recognizing empty code blocks. When a file header is followed by an empty code block (or one containing only whitespace), the `onFileDelete` callback is triggered:
+
+````typescript
+**fileToDelete.js**
+
+```
+```
+
+**anotherFileToDelete.css**
+
+```
+
+```
+````
+
+This pattern signals that these files should be removed from your project.
 
 #### Methods
 
