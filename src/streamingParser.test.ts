@@ -179,6 +179,153 @@ describe("StreamingMarkdownParser", () => {
     ]);
   });
 
+  it("should handle file deletion when empty code block is detected", async () => {
+    const deletedFiles: string[] = [];
+
+    const callbacksWithDelete: StreamingParserCallbacks = {
+      onFileNameChange: async (fileName, format) => {
+        fileNameChanges.push({ name: fileName, format });
+      },
+      onCodeLine: async (line) => {
+        codeLines.push(line);
+      },
+      onNonCodeLine: async (line) => {
+        nonCodeLines.push(line);
+      },
+      onFileDelete: async (fileName) => {
+        deletedFiles.push(fileName);
+      },
+    };
+
+    const deleteParser = new StreamingMarkdownParser(callbacksWithDelete);
+
+    // Test case: File with completely empty code block
+    const input = "**fileToDelete.js**\n\n```\n```\n";
+    await deleteParser.processChunk(input);
+    await deleteParser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "fileToDelete.js", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual([]);
+    expect(deletedFiles).toEqual(["fileToDelete.js"]);
+  });
+
+  it("should handle file deletion with whitespace-only code block", async () => {
+    const deletedFiles: string[] = [];
+
+    const callbacksWithDelete: StreamingParserCallbacks = {
+      onFileNameChange: async (fileName, format) => {
+        fileNameChanges.push({ name: fileName, format });
+      },
+      onCodeLine: async (line) => {
+        codeLines.push(line);
+      },
+      onNonCodeLine: async (line) => {
+        nonCodeLines.push(line);
+      },
+      onFileDelete: async (fileName) => {
+        deletedFiles.push(fileName);
+      },
+    };
+
+    const deleteParser = new StreamingMarkdownParser(callbacksWithDelete);
+
+    // Test case: File with whitespace-only code block
+    const input = "**emptyFile.css**\n\n```\n   \n\t\n```\n";
+    await deleteParser.processChunk(input);
+    await deleteParser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "emptyFile.css", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual(["   ", "\t"]);
+    expect(deletedFiles).toEqual(["emptyFile.css"]);
+  });
+
+  it("should not delete file with actual content", async () => {
+    const deletedFiles: string[] = [];
+
+    const callbacksWithDelete: StreamingParserCallbacks = {
+      onFileNameChange: async (fileName, format) => {
+        fileNameChanges.push({ name: fileName, format });
+      },
+      onCodeLine: async (line) => {
+        codeLines.push(line);
+      },
+      onNonCodeLine: async (line) => {
+        nonCodeLines.push(line);
+      },
+      onFileDelete: async (fileName) => {
+        deletedFiles.push(fileName);
+      },
+    };
+
+    const deleteParser = new StreamingMarkdownParser(callbacksWithDelete);
+
+    // Test case: File with actual content
+    const input = "**normalFile.js**\n\n```\nconsole.log('hello');\n```\n";
+    await deleteParser.processChunk(input);
+    await deleteParser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "normalFile.js", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual(["console.log('hello');"]);
+    expect(deletedFiles).toEqual([]); // No files should be deleted
+  });
+
+  it("should handle mixed scenario with deletion and normal files", async () => {
+    const deletedFiles: string[] = [];
+
+    const callbacksWithDelete: StreamingParserCallbacks = {
+      onFileNameChange: async (fileName, format) => {
+        fileNameChanges.push({ name: fileName, format });
+      },
+      onCodeLine: async (line) => {
+        codeLines.push(line);
+      },
+      onNonCodeLine: async (line) => {
+        nonCodeLines.push(line);
+      },
+      onFileDelete: async (fileName) => {
+        deletedFiles.push(fileName);
+      },
+    };
+
+    const deleteParser = new StreamingMarkdownParser(callbacksWithDelete);
+
+    // Mixed scenario: normal file, deleted file, another normal file
+    const input =
+      "**keepThis.js**\n```\nconsole.log('keep');\n```\n" +
+      "**deleteThis.js**\n```\n```\n" +
+      "**alsoKeep.css**\n```\nbody { color: red; }\n```\n";
+
+    await deleteParser.processChunk(input);
+    await deleteParser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "keepThis.js", format: "Bold Format" },
+      { name: "deleteThis.js", format: "Bold Format" },
+      { name: "alsoKeep.css", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual(["console.log('keep');", "body { color: red; }"]);
+    expect(deletedFiles).toEqual(["deleteThis.js"]);
+  });
+
+  it("should work when onFileDelete callback is not provided", async () => {
+    // Test that parser still works when onFileDelete is not provided
+    const input = "**fileToDelete.js**\n```\n```\n";
+    await parser.processChunk(input);
+    await parser.flushRemaining();
+
+    expect(fileNameChanges).toEqual([
+      { name: "fileToDelete.js", format: "Bold Format" },
+    ]);
+    expect(codeLines).toEqual([]);
+    // Should not throw error even though onFileDelete is not defined
+  });
+
   it("should process sample streams and match expected files", async () => {
     for (const [index, sampleStream] of sampleStreams.entries()) {
       // Reset state for each sample stream

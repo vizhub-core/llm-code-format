@@ -17,6 +17,12 @@ export type StreamingParserCallbacks = {
    * @param line - A line of text that is not code or a file header.
    */
   onNonCodeLine?: (line: string) => Promise<void>;
+
+  /**
+   * Called when a file should be deleted (empty code block detected).
+   * @param fileName - The name of the file to be deleted.
+   */
+  onFileDelete?: (fileName: string) => Promise<void>;
 };
 
 export class StreamingMarkdownParser {
@@ -25,6 +31,7 @@ export class StreamingMarkdownParser {
   private currentFileName: string | null = null;
   private detectedFormat: string = "Unknown Format";
   private callbacks: StreamingParserCallbacks;
+  private currentFileHasContent: boolean = false;
 
   /**
    * An array of regex patterns for detecting file headers.
@@ -83,13 +90,31 @@ export class StreamingMarkdownParser {
   private async processLine(line: string) {
     // Check if the line is a code fence marker (could be "```" or "```lang")
     if (line.trim().startsWith("```")) {
+      const wasInsideCodeFence = this.insideCodeFence;
       this.insideCodeFence = !this.insideCodeFence;
+
+      // If we're ending a code fence and the current file had no content, trigger deletion
+      if (wasInsideCodeFence && !this.insideCodeFence) {
+        if (
+          this.currentFileName &&
+          !this.currentFileHasContent &&
+          this.callbacks.onFileDelete
+        ) {
+          await this.callbacks.onFileDelete(this.currentFileName);
+        }
+      }
+
       return; // The fence marker itself is not emitted as code content.
     }
 
     if (this.insideCodeFence) {
       // Emit every line inside the code fence as a code line.
       await this.callbacks.onCodeLine(line);
+
+      // Track if this file has any non-whitespace content
+      if (line.trim().length > 0) {
+        this.currentFileHasContent = true;
+      }
     } else {
       // Outside a code fence, check for file header patterns.
       for (const { regex, format } of this.headerPatterns) {
@@ -101,7 +126,10 @@ export class StreamingMarkdownParser {
             // Remove anything in parentheses and trim
             fileName = fileName.replace(/\s*\([^)]*\).*$/, "").trim();
           }
+
+          // Reset content tracking for new file
           this.currentFileName = fileName;
+          this.currentFileHasContent = false;
           this.detectedFormat = format;
           await this.callbacks.onFileNameChange(fileName, format);
           break; // Stop after the first matching header is found.
